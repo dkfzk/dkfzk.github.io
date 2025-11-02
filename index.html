@@ -75,7 +75,7 @@
           data.forEach(row => {
             const div = document.createElement("div");
             // 컬럼 이름이 testt니까 이렇게 접근
-            div.textContent = `포트: ${row.port} | 설명: ${row.script} |포트에 참가 가능: ${row.cannot}`;
+            div.textContent = `포트: ${row.port} | 설명: ${row.script}`;
             container.appendChild(div);
           });
         })
