@@ -6,8 +6,6 @@
   <title>멀티챗</title>
 </head>
 
-<body>
-
   <body>
     <h1>UN-AUTO 멀티챗</h1>
     <div class="1p">
@@ -63,7 +61,7 @@
       </form>
     </div>
     <script>
-      fetch("http://localhost:3000/api/Table_1")
+      fetch("https://unautopartychat.onrender.com/api/Table_1")
         .then(res => res.json())
         .then(data => {
           if (!Array.isArray(data)) {
@@ -116,7 +114,7 @@
           if (checkbox.checked) {
             pub = 1
           };
-          fetch("http://localhost:3000/api/server", {
+          fetch("https://unautopartychat.onrender.com/api/server", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -154,7 +152,7 @@
                 };
 
 
-                fetch("http://localhost:3000/api/Table_1")
+                fetch("https://unautopartychat.onrender.com/api/Table_1")
                   .then(res => res.json())
                   .then(data => {
                     if (!Array.isArray(data)) {
@@ -194,7 +192,7 @@
           if (!port1) return alert("⚠️ 포트 번호를 입력하세요!");
 
           try {
-            const check = await fetch(`http://localhost:3000/api/server/${port1}`);
+            const check = await fetch(`https://unautopartychat.onrender.com/api/server/${port1}`);
             const checkData = await check.json();
 
             if (checkData.exists) {
@@ -228,7 +226,7 @@
                 resultDiv.textContent = port;
 
                 const port2 = Number(document.getElementById("inrinput").value);
-                fetch(`http://localhost:3000/api/server/${port2}`)
+                fetch(`https://unautopartychat.onrender.com/api/server/${port2}`)
                   .then(res => res.json())
                   .then(response => {
                     console.log("서버 응답:", response);
@@ -267,7 +265,7 @@
           event.preventDefault(); // 페이지 새로고침 방지
 
           const newtalk = document.getElementById('upr').value
-          fetch(`http://localhost:3000/api/server/${port}`, {
+          fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -286,7 +284,7 @@
         })
       }
       function ret() {
-        fetch(`http://localhost:3000/api/server/${port}`)
+        fetch(`https://unautopartychat.onrender.com/api/server/${port}`)
           .then(res => res.json())
           .then(response => {
             if (response.exists) {
@@ -314,7 +312,7 @@
       }
       function wec() {
         const nick = document.getElementById('nick').value
-        fetch(`http://localhost:3000/api/server/${port}`, {
+        fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -330,7 +328,7 @@
           .catch(err => console.error("PUT 요청 실패:", err));
       }
       function deleteServer(port) {
-        fetch(`http://localhost:3000/api/server/${port}`, {
+        fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
           method: "DELETE",
         })
           .then(res => res.json())
