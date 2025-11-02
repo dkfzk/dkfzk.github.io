@@ -24,7 +24,7 @@ const pool = new Pool({
 // 3. API 엔드포인트
 
 // 전체 서버 공개 리스트
-app.get('/api/Table_1/', async (req, res) => {
+app.get('/api/server/', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM server WHERE pub = true');
     res.json(result.rows);
