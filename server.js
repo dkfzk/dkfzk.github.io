@@ -1,6 +1,5 @@
 // 1. 모듈 불러오기
 const express = require('express');
-const { Pool } = require('pg');
 const cors = require('cors');
 
 const app = express();
@@ -13,10 +12,10 @@ app.get('/', (req, res) => res.send('✅ API 서버 동작 중'));
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'postgres',          // User
-  host: 'postgres-production-50ce.up.railway.app', // Host
-  database: 'railway',        // Database
-  password: 'ZVmHbwBzDuLFCCGEJBRkgYjrveZOEafv',  // Password
+  user: 'testdb_8gh2_user',          // User
+  host: 'dpg-d43dl1hr0fns73etg7lg-a', // Host
+  database: 'testdb_8gh2',        // Database
+  password: 'GHUvNRQmwSXQ1BCjTfxJjJlV1lTn7UGK',  // Password
   port: 5432,
 });
 
