@@ -1,12 +1,15 @@
 // 1. 모듈 불러오기
 const express = require('express');
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => res.send('✅ API 서버 동작 중'));
 
-
+app.use(cors({
+  origin: 'https://unatoparty.netlify.app'
+}));
 
 
 // 2. PostgreSQL 연결 설정
