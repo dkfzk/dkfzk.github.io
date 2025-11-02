@@ -7,8 +7,8 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.send('✅ API 서버 동작 중'));
 
-import cors from "cors";
-app.use(cors());
+
+
 
 // 2. PostgreSQL 연결 설정
 const { Pool } = require('pg');
