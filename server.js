@@ -3,6 +3,7 @@ const express = require('express');
 const sql = require('mssql');
 const cors = require('cors');
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -30,7 +31,7 @@ app.get('/api/Table_1/', async (req, res) => {
     res.json(result.recordset);
   } catch (err) {
     console.error('❌ API 호출 실패:', err.message);
-    res.status(500).send('DB 쿼리 실패');
+    res.status(500).json({ error: "DB 조회 실패", detail: err.message });
   }
 });
 
@@ -69,7 +70,7 @@ app.post('/api/server', async (req, res) => {
 
   } catch (err) {
     console.error('❌ 값 추가 실패:', err);
-    res.status(500).json({ error: 'DB 추가 실패' });
+    res.status(500).json({ error: "DB 추가 실패", detail: err.message });
   }
 });
 
@@ -117,7 +118,7 @@ app.put('/api/server/:port', async (req, res) => {
 
   } catch (err) {
     console.error('❌ 수정 실패:', err);
-    res.status(500).json({ error: 'DB 수정 실패' });
+    res.status(500).json({ error: "DB 수정 실패", detail: err.message });
   }
 });
 
@@ -144,7 +145,7 @@ app.get('/api/server/:port2', async (req, res) => {
     }
   } catch (err) {
     console.error('❌ 조회 실패:', err.message);
-    res.status(500).json({ error: 'DB 조회 실패' });
+    res.status(500).json({ error: "DB 조회 실패", detail: err.message });
   }
 });
 
@@ -173,7 +174,7 @@ app.delete('/api/server/:port', async (req, res) => {
 
   } catch (err) {
     console.error('❌ DELETE 요청 실패:', err);
-    res.status(500).json({ deleted: false, message: 'DB 삭제 실패' });
+    res.status(500).json({ error: "DB 삭제 실패", detail: err.message });
   }
 });
 
