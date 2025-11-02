@@ -1,6 +1,6 @@
 // 1. 모듈 불러오기
 const express = require('express');
-import cors from 'cors';
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
