@@ -3,21 +3,20 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>멀티챗</title>
+  <title>변형체스 위키</title>
 </head>
 
   <body>
-    <h1>UN-AUTO 멀티챗</h1>
+    <h1>변형체스 위키</h1>
     <div class="1p">
-      <button onclick="aksemfrl()">포트 새로 만들기</button>
+      <button onclick="aksemfrl()">항목 새로 만들기</button>
       <h3>OR</h3>
       <form id="inr">
         참가할 포트 입력 <input id="inrinput" type="text" placeholder="포트입력" required>
-        닉네임 입력 <input id="nick" type="text" placeholder="닉네임 입력" required>
-        <button onclick="intor()">포트에 참가하기</button>
+        <button onclick="intor()">항목에 방문</button>
       </form>
 
-      <h3>아는 포트가 없다면? 아래에서 공개된 포트 찾아 참가하기</h3>
+      <h3>기물찾기</h3>
       <div id="table-list"></div>
     </div>
     <div class="3p" style="display: none;">
@@ -25,40 +24,18 @@
     </div>
     <div style="display: none;" class="2p">
       <form id="cl">
-        <h3>포트입력</h3>
-        <input id="portinput" type="text" placeholder="포트입력">
-        <h3>포트공개(미체크)/완전공개(체크)</h3>
-        <h4>포트공개시 포트를 아는사람만 들어올수 있습니다 | 완전공개시 매인화면 리스트에서 당신의 포트를 찾을수 있습니다</h4>
+        <h3>기물의 이름 입력</h3>
+        <input id="portinput" type="text" placeholder="이름입력">
+        <h3>공개 기물(미체크)/비공개 기물(체크)</h3>
+        <h4>공개시 이 페이지에서 기물을 찾아 방문할수 있습니다/비공개시 기물이름을 아는 사람만 항목에 방문할수 있습니다</h4>
         <input id="pubinput" type="checkbox" value=1>
-        <h3>방에 넣을 설명을 입력하세요</h3>
-        <h3>ex - 채팅 이름, 채팅 모드, 현재 플랫홈 등...</h3>
+        <h3>기물의 설명을 입력하세요</h3>
+        <h3>단순 설명만 입력하면 됨</h3>
         <input id="scinput" type="text" placeholder="설명입력">
-        <button onclick="makeroom()">포트 시작!</button>
-      </form>
-    </div>
-    <div class="3p" style="display: none;">
-      <div id="inroom"></div>
-      <h3 id="wan">방장입니다</h3>
-      <form id="ta">
-        <label for="talkInput">메시지:</label><br>
-        <textarea id="upr" rows="10" cols="200" placeholder="포트에 있는 다른 사람에게 매시지 보내기"></textarea>
-        <h3>밑 버튼으로 메세지 보내기</h3>
-        <button onclick="upme()">보내기</button>
-        <br>
-      </form>
-      <br>
-      <pre id="tout" style="font-size: 16px" style="font-weight: bold;">메세지가 없습니다... 밑 버튼으로 갱신해보세요!</pre></br>
-      <button onclick="ret()">매세지갱신</button>
-      <form id="imgshow">
-        <input id="show" type="text">
-        <button onclick="showimg()">이미지 보이기</button>
-        <img id="im">
-      </form>
-      <img>
-    </div>
-    <div class="onlyw" style="display: none;">
-      <button onclick="deleteServer(port)">서버 삭제</button>
-
+        <h3>문서의 비밀번호 입력</h3>
+        <h3>비밀번호를 알아야 문서수정 가능</h3>
+        <input id="passput" type="password" placeholder="비밀번호 입력">
+        <button onclick="makeroom()">문서 개설</button>
       </form>
     </div>
     <script>
@@ -76,7 +53,7 @@
           data.forEach(row => {
             const div = document.createElement("div");
             // 컬럼 이름이 testt니까 이렇게 접근
-            div.textContent = `포트: ${row.port} | 설명: ${row.script}`;
+            div.textContent = `이름: ${row.port} | 설명: ${row.script} | 추천수: ${row.vote}`;
             container.appendChild(div);
           });
         })
@@ -127,7 +104,7 @@
             .then(res => res.json())
             .then(data => {
               if (data.duplicated) {
-                alert('이미 이러한 포트를 쓰는사람이 존재합니다'); // ⚠️ 중복 경고
+                alert('이미 이러한 이름의 기물이 존재합니다'); // ⚠️ 중복 경고
                 return;
               } else {
                 elements = document.getElementsByClassName('2p');
@@ -135,7 +112,7 @@
                   elements[i].style.display = 'none';
                 }
 
-                elements = document.getElementsByClassName('3p');
+                elements = document.getElementsByClassName('1p');
                 for (let i = 0; i < elements.length; i++) {
                   elements[i].style.display = 'block';
                 };
