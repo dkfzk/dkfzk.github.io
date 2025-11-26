@@ -96,7 +96,7 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              port: Number(port),
+              title: document.getElementById('portput').value,
               pub: Boolean(pub),
               scr: document.getElementById('scinput').value
             })
@@ -118,7 +118,7 @@
                 };
                 if (wanjang == 1) {
                   const wanj = document.getElementById("wan")
-                  wanj.textContent = `방장입니다`;
+                  wanj.textContent = `편집가능 상태입니다`;
                   elements = document.getElementsByClassName('onlyw');
                   for (let i = 0; i < elements.length; i++) {
                     elements[i].style.display = 'block';
@@ -126,7 +126,7 @@
                 }
                 else {
                   const wanj = document.getElementById("wan")
-                  wanj.textContent = `참가자입니다`
+                  wanj.textContent = `보기만 가능 상태입니다`
                 };
 
 
@@ -160,12 +160,11 @@
 
       function intor() {
         const myForm = document.getElementById('inr'); // 폼 요소 선택
-        const nick = document.getElementById('nick').value
         myForm.addEventListener('submit', async function (event) { // ← 여기에 async
           event.preventDefault(); // 페이지 새로고침 방지
 
           const port1 = document.getElementById("inrinput").value;
-          port = Number(document.getElementById("inrinput").value);
+          port = port1
 
           if (!port1) return alert("⚠️ 포트 번호를 입력하세요!");
 
@@ -203,7 +202,7 @@
                 const resultDiv = document.getElementById('viewport');
                 resultDiv.textContent = port;
 
-                const port2 = Number(document.getElementById("inrinput").value);
+                const port2 = document.getElementById("inrinput").value
                 fetch(`https://unautopartychat.onrender.com/api/server/${port2}`)
                   .then(res => res.json())
                   .then(response => {
@@ -214,11 +213,11 @@
                     if (response.exists && Array.isArray(response.data)) {
                       roomsc.innerHTML = '';
                       response.data.forEach(row => {
-                        roomsc.innerHTML += `설명: ${row.script}<br>\n내 닉네임: ${nick}`;
+                        roomsc.innerHTML += `설명: ${row.script}`;
                       });
                       roomsc.style.display = 'block';
                     } else {
-                      roomsc.innerHTML = '해당 포트가 없습니다.';
+                      roomsc.innerHTML = '해당 기물은 없습니다.';
                       roomsc.style.display = 'block';
                     }
                   })
@@ -289,21 +288,6 @@
         })
       }
       function wec() {
-        const nick = document.getElementById('nick').value
-        fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            newtalk: nick + "이/가 들어왔습니다",
-            port: port
-          })
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.updated) {
-            } else { }
-          })
-          .catch(err => console.error("PUT 요청 실패:", err));
       }
       function deleteServer(port) {
         fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
