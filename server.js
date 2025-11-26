@@ -1,5 +1,6 @@
 // 1. 모듈 불러오기
 const express = require('express');
+import cors from 'cors';
 const cors = require('cors');
 
 const app = express();
@@ -40,17 +41,17 @@ app.get('/api/server/', async (req, res) => {
 // 서버 추가
 app.post('/api/server', async (req, res) => {
   try {
-    const { title, pub, scr } = req.body;
-    const portInt = port;
+    const { port, pub, scr } = req.body;
+    const portInt = parseInt(port);
     const pubBool = pub === true || pub === 'true';
 
     // 중복 체크
     const check = await pool.query('SELECT COUNT(*) FROM server WHERE port=$1', [portInt]);
     if (check.rows[0].count > 0)
-      return res.status(200).json({ duplicated: true, message: '이미 존재하는 기물입니다.' });
+      return res.status(200).json({ duplicated: true, message: '이미 존재하는 port입니다.' });
 
     await pool.query(
-      'INSERT INTO server (name, pub,script) VALUES ($1, $2,$3)',
+      'INSERT INTO server (port, pub,script) VALUES ($1, $2,$3)',
       [portInt, pubBool, scr]
     );
 
@@ -64,7 +65,7 @@ app.post('/api/server', async (req, res) => {
 // 특정 포트 조회
 app.get('/api/server/:port', async (req, res) => {
   try {
-    const port = req.params.port;
+    const port = parseInt(req.params.port);
     const result = await pool.query('SELECT * FROM server WHERE port=$1', [port]);
     res.json(result.rows.length ? { exists: true, data: result.rows } : { exists: false });
   } catch (err) {
@@ -76,11 +77,11 @@ app.get('/api/server/:port', async (req, res) => {
 // 특정 포트 수정
 app.put('/api/server/:port', async (req, res) => {
   try {
-    const port = req.params.port
+    const port = parseInt(req.params.port);
     const { newtalk } = req.body;
 
     const result = await pool.query(
-      'UPDATE server SET talk=$1 WHERE name=$2',
+      'UPDATE server SET talk=$1 WHERE port=$2',
       [String(newtalk ?? ""), port]
     );
 
@@ -97,11 +98,11 @@ app.put('/api/server/:port', async (req, res) => {
 // 특정 포트 삭제
 app.delete('/api/server/:port', async (req, res) => {
   try {
-    const port = req.params.port
+    const port = parseInt(req.params.port);
     if (isNaN(port))
       return res.status(400).json({ deleted: false, message: '유효하지 않은 포트 번호입니다.' });
 
-    const result = await pool.query('DELETE FROM server WHERE name=$1', [port]);
+    const result = await pool.query('DELETE FROM server WHERE port=$1', [port]);
 
     res.json(result.rowCount > 0
       ? { deleted: true, message: '✅ 삭제 성공' }
