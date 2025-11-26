@@ -42,7 +42,7 @@ app.get('/api/server/', async (req, res) => {
 app.post('/api/server', async (req, res) => {
   try {
     const { port, pub, scr } = req.body;
-    const portInt = parseInt(port);
+    const portInt = port;
     const pubBool = pub === true || pub === 'true';
 
     // 중복 체크
@@ -65,7 +65,7 @@ app.post('/api/server', async (req, res) => {
 // 특정 포트 조회
 app.get('/api/server/:port', async (req, res) => {
   try {
-    const port = parseInt(req.params.port);
+    const port = req.params.port;
     const result = await pool.query('SELECT * FROM server WHERE port=$1', [port]);
     res.json(result.rows.length ? { exists: true, data: result.rows } : { exists: false });
   } catch (err) {
@@ -77,7 +77,7 @@ app.get('/api/server/:port', async (req, res) => {
 // 특정 포트 수정
 app.put('/api/server/:port', async (req, res) => {
   try {
-    const port = parseInt(req.params.port);
+    const port = req.params.port;
     const { newtalk } = req.body;
 
     const result = await pool.query(
@@ -98,7 +98,7 @@ app.put('/api/server/:port', async (req, res) => {
 // 특정 포트 삭제
 app.delete('/api/server/:port', async (req, res) => {
   try {
-    const port = parseInt(req.params.port);
+    const port = req.params.port;
     if (isNaN(port))
       return res.status(400).json({ deleted: false, message: '유효하지 않은 포트 번호입니다.' });
 

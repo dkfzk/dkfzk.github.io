@@ -120,7 +120,7 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            port: Number(port),
+            port: port,
             pub: Boolean(pub),
             scr: document.getElementById('scinput').value
           })
@@ -189,7 +189,7 @@
         event.preventDefault(); // 페이지 새로고침 방지
 
         const port1 = document.getElementById("inrinput").value;
-        port = Number(document.getElementById("inrinput").value);
+        port = document.getElementById("inrinput").value;
 
         if (!port1) return alert("⚠️ 포트 번호를 입력하세요!");
 
