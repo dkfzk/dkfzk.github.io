@@ -14,7 +14,7 @@
     <h3>OR</h3>
     <form id="inrr">
       들어갈 항목 번호 입력 <input id="inrinput" type="text" placeholder="번호입력" required>
-      <button onclick="intor()" onclick="ret()">항목에 들어가기</button>
+      <button onclick="intor()">항목에 들어가기</button>
     </form>
 
     <h3>아는 포트가 없다면? 아래에서 공개된 포트 찾아 참가하기</h3>
@@ -259,18 +259,10 @@
         }
       }); 
       
-      fetch(`https://unautopartychat.onrender.com/api/server/${port}`)
-        .then(res => res.json())
-        .then(response => {
-          if (response.exists) {
-            response.data.forEach(row => {
-              const toutt = document.getElementById("tout");
-              toutt.textContent = `메세지: \n\n${row.talk}`;
-              console.log("eee")
-            });
-          }
-        })
-        .catch(err => console.error(err)); // end addEventListener
+      
+      console.log("eeeee");
+      ret();
+        // end addEventListener
     } // end function intor
 
 
