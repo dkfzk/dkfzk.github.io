@@ -2,331 +2,330 @@
 <html lang="ko">
 
 <head>
-<meta charset="UTF-8">
-<title>변체위</title>
+  <meta charset="UTF-8">
+  <title>변체위</title>
   <link rel="stylesheet" href="css.css">
 </head>
 
 <body>
-<h1>(잉그남發(발)) 변형체스 - 위키</h1>
-<div class="1p">
-<button onclick="aksemfrl()">항목 새로 만들기</button>
-<h3>OR</h3>
-<form id="inr">
-들어갈 항목 번호 입력 <input id="inrinput" type="text" placeholder="번호입력" required>
-<button onclick="intor()">항목에 들어가기</button>
-</form>
+  <h1>(잉그남發(발)) 변형체스 - 위키</h1>
+  <div class="1p">
+    <button onclick="aksemfrl()">항목 새로 만들기</button>
+    <h3>OR</h3>
+    <form id="inrr">
+      들어갈 항목 번호 입력 <input id="inrinput" type="text" placeholder="번호입력" required>
+      <button onclick="intor()">항목에 들어가기</button>
+    </form>
 
-<h3>아는 포트가 없다면? 아래에서 공개된 포트 찾아 참가하기</h3>
-<div id="table-list"></div>
-</div>
-<div class="3p" style="display: none;">
-<h1 id="viewport"></h1>
-</div>
-<div style="display: none;" class="2p">
-<form id="cl">
-<h3>항목 번호 입력</h3>
-<input id="portinput" type="text" placeholder="포트입력">
-<h3>일부공개(미체크)/완전공개(체크)</h3>
-<h4>일부공개시 항목번호 아는사람만 들어올수 있습니다 | 완전공개시 매인화면 리스트에서 당신의 항목을 찾을수 있습니다</h4>
-<input id="pubinput" type="checkbox" value=1>
-<h3>기물 이름과 한줄 설명을 입력하세요</h3>
-<h3>기물 이름, 작성자 정도가 적당합니다</h3>
-<input id="scinput" type="text" placeholder="이름 입력">
-<button onclick="makeroom()">포트 시작!</button>
-</form>
-</div>
-<div class="3p" style="display: none;">
-<div id="inroom"></div>
-<h3 id="wan">편집 가능 상태입니다</h3>
-<form id="ta">
-<label for="talkInput">메시지:</label><br>
-<textarea id="upr" rows="10" cols="200" placeholder="문서 수정"></textarea>
-<h3>밑 버튼으로 수정안 보내기(위에 입력한 내용으로 교체되는 방식)</h3>
-<button onclick="upme()">수정</button>
-<br>
-</form>
-<br>
-<pre id="tout" style="font-size: 16px" style="font-weight: bold;">메세지가 없습니다... 밑 버튼으로 갱신해보세요!</pre></br>
-<button onclick="ret()">갱신</button>
-<form id="imgshow">
-<input id="show" type="text">
-<button onclick="showimg()">이미지 보이기</button>
-<img id="im">
-</form>
-<img>
-</div>
-<div class="onlyw" style="display: none;">
-<button onclick="deleteServer(port)">항목 삭제</button>
+    <h3>아는 포트가 없다면? 아래에서 공개된 포트 찾아 참가하기</h3>
+    <div id="table-list"></div>
+  </div>
+  <div class="3p" style="display: none;">
+    <h1 id="viewport"></h1>
+  </div>
+  <div style="display: none;" class="2p">
+    <form id="cl">
+      <h3>항목 번호 입력</h3>
+      <input id="portinput" type="text" placeholder="포트입력">
+      <h3>일부공개(미체크)/완전공개(체크)</h3>
+      <h4>일부공개시 항목번호 아는사람만 들어올수 있습니다 | 완전공개시 매인화면 리스트에서 당신의 항목을 찾을수 있습니다</h4>
+      <input id="pubinput" type="checkbox" value=1>
+      <h3>기물 이름과 한줄 설명을 입력하세요</h3>
+      <h3>기물 이름, 작성자 정도가 적당합니다</h3>
+      <input id="scinput" type="text" placeholder="이름 입력">
+      <button onclick="makeroom()">포트 시작!</button>
+    </form>
+  </div>
+  <div class="3p" style="display: none;">
+    <div id="inroom"></div>
+    <h3 id="wan">편집 가능 상태입니다</h3>
+    <form id="ta">
+      <label for="talkInput">메시지:</label><br>
+      <textarea id="upr" rows="10" cols="200" placeholder="문서 수정"></textarea>
+      <h3>밑 버튼으로 수정안 보내기(위에 입력한 내용으로 교체되는 방식)</h3>
+      <button onclick="upme()">수정</button>
+      <br>
+    </form>
+    <br>
+    <pre id="tout" style="font-size: 16px" style="font-weight: bold;">메세지가 없습니다... 밑 버튼으로 갱신해보세요!</pre></br>
+    <button onclick="ret()">갱신</button>
+    <form id="imgshow">
+      <input id="show" type="text">
+      <button onclick="showimg()">이미지 보이기</button>
+      <img id="im">
+    </form>
+    <img>
+  </div>
+  <div class="onlyw" style="display: none;">
+    <button onclick="deleteServer(port)">항목 삭제</button>
 
-</form>
-</div>
-<script>
-fetch("https://unautopartychat.onrender.com/api/server")
-.then(res => res.json())
-.then(data => {
-if (!Array.isArray(data)) {
-console.error("⚠️ 서버에서 배열이 오지 않았어요:", data);
-return;
-}
+    </form>
+  </div>
+  <script>
+    fetch("https://unautopartychat.onrender.com/api/server")
+      .then(res => res.json())
+      .then(data => {
+        if (!Array.isArray(data)) {
+          console.error("⚠️ 서버에서 배열이 오지 않았어요:", data);
+          return;
+        }
 
-const container = document.getElementById("table-list");
-container.innerHTML = "";
+        const container = document.getElementById("table-list");
+        container.innerHTML = "";
 
-data.forEach(row => {
-const div = document.createElement("div");
-// 컬럼 이름이 testt니까 이렇게 접근
-div.textContent = `포트: ${row.port} | 설명: ${row.script}`;
-container.appendChild(div);
-});
-})
-.catch(err => console.error("API 호출 실패:", err));
-let port
-loca = 0
-let pub
-let wanjang
+        data.forEach(row => {
+          const div = document.createElement("div");
+          // 컬럼 이름이 testt니까 이렇게 접근
+          div.textContent = `포트: ${row.port} | 설명: ${row.script}`;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => console.error("API 호출 실패:", err));
+    let port
+    loca = 0
+    let pub
+    let wanjang
 
-function aksemfrl() {
-loca = 1
-let pub = 0
-let elements = 0
-elements = document.getElementsByClassName('1p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'none';
+    function aksemfrl() {
+      loca = 1
+      let pub = 0
+      let elements = 0
+      elements = document.getElementsByClassName('1p');
+      for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
 
-elements = document.getElementsByClassName('2p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'block';
-}
-}
-}
-function makeroom() {
-const myForm = document.getElementById('cl'); // 폼 요소를 선택
+        elements = document.getElementsByClassName('2p');
+        for (let i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      }
+    }
+    function makeroom() {
+      const myForm = document.getElementById('cl'); // 폼 요소를 선택
 
-myForm.addEventListener('submit', function (event) {
-event.preventDefault(); // 페이지 새로고침 방지
+      myForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // 페이지 새로고침 방지
 
-port = document.getElementById('portinput').value;
-wanjang = 1
+        port = document.getElementById('portinput').value;
+        wanjang = 1
 
-const resultDiv = document.getElementById('viewport');
-resultDiv.textContent = port;
-const checkbox = document.getElementById('pubinput')
-if (checkbox.checked) {
-pub = 1
-};
-fetch("https://unautopartychat.onrender.com/api/server", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-port: port,
-pub: Boolean(pub),
-scr: document.getElementById('scinput').value
-})
-})
-.then(res => res.json())
-.then(data => {
-if (data.duplicated) {
-alert('이미 이러한 번호를 쓰는사람이 존재합니다'); // ⚠️ 중복 경고
-return;
-} else {
-elements = document.getElementsByClassName('2p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'none';
-}
+        const resultDiv = document.getElementById('viewport');
+        resultDiv.textContent = port;
+        const checkbox = document.getElementById('pubinput')
+        if (checkbox.checked) {
+          pub = 1
+        };
+        fetch("https://unautopartychat.onrender.com/api/server", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            port: port,
+            pub: Boolean(pub),
+            scr: document.getElementById('scinput').value
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.duplicated) {
+              alert('이미 이러한 번호를 쓰는사람이 존재합니다'); // ⚠️ 중복 경고
+              return;
+            } else {
+              elements = document.getElementsByClassName('2p');
+              for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'none';
+              }
 
-elements = document.getElementsByClassName('3p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'block';
-};
-if (wanjang == 1) {
-const wanj = document.getElementById("wan")
-wanj.textContent = `방장입니다`;
-elements = document.getElementsByClassName('onlyw');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'block';
-}
-}
-else {
-const wanj = document.getElementById("wan")
-wanj.textContent = `참가자입니다`
-};
-
-
-fetch("https://unautopartychat.onrender.com/api/Table_1")
-.then(res => res.json())
-.then(data => {
-if (!Array.isArray(data)) {
-console.error("⚠️ 서버에서 배열이 오지 않았어요:", data);
-return;
-}
-
-const container = document.getElementById("table-list");
-container.innerHTML = "";
-
-data.forEach(row => {
-const roomsc = document.getElementById('inroom')
-roomsc.textContent = `설명: ${row.script}`;
-roomsc.style.display = 'block'
-});
-})
-.catch(err => console.error("API 호출 실패:", err));
-}
-})
-.catch(err => {
-console.error("추가 요청 실패:", err);
-alert("❌ 서버 오류가 발생했습니다.");
-});
-
-})
-}
-
-function intor() {
-const myForm = document.getElementById('inr'); // 폼 요소 선택
-const nick = document.getElementById('nick').value
-myForm.addEventListener('submit', async function (event) { // ← 여기에 async
-event.preventDefault(); // 페이지 새로고침 방지
-
-const port1 = document.getElementById("inrinput").value;
-port = document.getElementById("inrinput").value;
-
-if (!port1) return alert("⚠️ 포트 번호를 입력하세요!");
-
-try {
-const check = await fetch(`https://unautopartychat.onrender.com/api/server/${port1}`);
-const checkData = await check.json();
-
-if (checkData.exists) {
-
-let elements = document.getElementsByClassName('1p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'none';
-}
-
-elements = document.getElementsByClassName('2p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'none';
-}
-
-elements = document.getElementsByClassName('3p');
-for (let i = 0; i < elements.length; i++) {
-elements[i].style.display = 'block';
-}
-
-if (wanjang == 1) {
-const wanj = document.getElementById("wan");
-wanj.textContent = `방장입니다`;
-}
-else {
-const wanj = document.getElementById("wan");
-wanj.textContent = `참가자입니다`;
-wec()
-
-port = port1;
-const resultDiv = document.getElementById('viewport');
-resultDiv.textContent = port;
-
-const port2 = Number(document.getElementById("inrinput").value);
-fetch(`https://unautopartychat.onrender.com/api/server/${port2}`)
-.then(res => res.json())
-.then(response => {
-console.log("서버 응답:", response);
-console.log("typeof port:", typeof port2, "value:", port2);
-
-const roomsc = document.getElementById('inroom');
-if (response.exists && Array.isArray(response.data)) {
-roomsc.innerHTML = '';
-response.data.forEach(row => {
-roomsc.innerHTML += `설명: ${row.script}<br>\n내 닉네임: ${nick}`;
-});
-roomsc.style.display = 'block';
-} else {
-roomsc.innerHTML = '해당 포트가 없습니다.';
-roomsc.style.display = 'block';
-}
-})
-.catch(err => console.error(err));
-} // end else (참가자)
-}
-else {
-alert('이런 포트는 존재하지 않습니다')
-}
-// end if (checkData.exists)
-
-} catch (err) {
-console.error("❌ 오류 발생:", err);
-}
-}); // end addEventListener
-} // end function intor
+              elements = document.getElementsByClassName('3p');
+              for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'block';
+              };
+              if (wanjang == 1) {
+                const wanj = document.getElementById("wan")
+                wanj.textContent = `방장입니다`;
+                elements = document.getElementsByClassName('onlyw');
+                for (let i = 0; i < elements.length; i++) {
+                  elements[i].style.display = 'block';
+                }
+              }
+              else {
+                const wanj = document.getElementById("wan")
+                wanj.textContent = `참가자입니다`
+              };
 
 
-function upme() {
-const myForm = document.getElementById('ta'); // 폼 요소를 선택
-myForm.addEventListener('submit', function (event) {
-event.preventDefault(); // 페이지 새로고침 방지
+              fetch("https://unautopartychat.onrender.com/api/Table_1")
+                .then(res => res.json())
+                .then(data => {
+                  if (!Array.isArray(data)) {
+                    console.error("⚠️ 서버에서 배열이 오지 않았어요:", data);
+                    return;
+                  }
 
-const newtalk = document.getElementById('upr').value
-fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
-method: "PUT",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-newtalk: newtalk,
-port: port
-})
-})
-.then(res => res.json())
-.then(data => {
-if (data.updated) {
-} else {
-alert('이 포트를 찾을수 없습니다 포트가 삭제되었을수 있습니다')
-}
-})
-.catch(err => console.error("PUT 요청 실패:", err));
-})
-}
-function ret() {
-fetch(`https://unautopartychat.onrender.com/api/server/${port}`)
-.then(res => res.json())
-.then(response => {
-if (response.exists) {
-response.data.forEach(row => {
-const toutt = document.getElementById("tout");
-toutt.textContent = `메세지: \n\n${row.talk}`;
-});
-}
-})
-.catch(err => console.error(err));
+                  const container = document.getElementById("table-list");
+                  container.innerHTML = "";
 
-}
-function showimg() {
-const myForm = document.getElementById('imgshow'); // 폼 요소 선택
+                  data.forEach(row => {
+                    const roomsc = document.getElementById('inroom')
+                    roomsc.textContent = `설명: ${row.script}`;
+                    roomsc.style.display = 'block'
+                  });
+                })
+                .catch(err => console.error("API 호출 실패:", err));
+            }
+          })
+          .catch(err => {
+            console.error("추가 요청 실패:", err);
+            alert("❌ 서버 오류가 발생했습니다.");
+          });
 
-myForm.addEventListener('submit', async function (event) { // ← 여기에 async
-event.preventDefault();
-const url = document.getElementById("show").value
-const img = document.getElementById("im")
-img.src = url;
-img.alt = "사용자 입력 이미지";
-img.style.maxWidth = "25%";
-img.style.height = "auto";
-})
-}
-function wec() {
-}
-function deleteServer(port) {
-fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
-method: "DELETE",
-})
-.then(res => res.json())
-.then(data => {
-if (data.deleted) {
-alert("포트 삭제 완료");
-location.reload();
-} else {
-alert("⚠️ 삭제 실패: " + (data.message || "원인을 알 수 없습니다."));
-}
-})
-.catch(err => console.error("❌ DELETE 요청 실패:", err));
-}
+      })
+    }
 
-</script>
+    function intor() {
+      const myForm = document.getElementById('inrr'); // 폼 요소 선택
+      myForm.addEventListener('submit', async function (event) { // ← 여기에 async
+        event.preventDefault(); // 페이지 새로고침 방지
+
+        const port1 = document.getElementById("inrinput").value;
+        port = document.getElementById("inrinput").value;
+
+        if (!port1) return alert("⚠️ 포트 번호를 입력하세요!");
+
+        try {
+          const check = await fetch(`https://unautopartychat.onrender.com/api/server/${port1}`);
+          const checkData = await check.json();
+
+          if (checkData.exists) {
+
+            let elements = document.getElementsByClassName('1p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'none';
+            }
+
+            elements = document.getElementsByClassName('2p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'none';
+            }
+
+            elements = document.getElementsByClassName('3p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'block';
+            }
+
+            if (wanjang == 1) {
+              const wanj = document.getElementById("wan");
+              wanj.textContent = `방장입니다`;
+            }
+            else {
+              const wanj = document.getElementById("wan");
+              wanj.textContent = `참가자입니다`;
+              wec()
+
+              port = port1;
+              const resultDiv = document.getElementById('viewport');
+              resultDiv.textContent = port;
+
+              const port2 = Number(document.getElementById("inrinput").value);
+              fetch(`https://unautopartychat.onrender.com/api/server/${port2}`)
+                .then(res => res.json())
+                .then(response => {
+                  console.log("서버 응답:", response);
+                  console.log("typeof port:", typeof port2, "value:", port2);
+
+                  const roomsc = document.getElementById('inroom');
+                  if (response.exists && Array.isArray(response.data)) {
+                    roomsc.innerHTML = '';
+                    response.data.forEach(row => {
+                      roomsc.innerHTML += `설명: ${row.script}`;
+                    });
+                    roomsc.style.display = 'block';
+                  } else {
+                    roomsc.innerHTML = '해당 포트가 없습니다.';
+                    roomsc.style.display = 'block';
+                  }
+                })
+                .catch(err => console.error(err));
+            } // end else (참가자)
+          }
+          else {
+            alert('이런 포트는 존재하지 않습니다')
+          }
+          // end if (checkData.exists)
+
+        } catch (err) {
+          console.error("❌ 오류 발생:", err);
+        }
+      }); // end addEventListener
+    } // end function intor
+
+
+    function upme() {
+      const myForm = document.getElementById('ta'); // 폼 요소를 선택
+      myForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // 페이지 새로고침 방지
+
+        const newtalk = document.getElementById('upr').value
+        fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            newtalk: newtalk,
+            port: port
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.updated) {
+            } else {
+              alert('이 포트를 찾을수 없습니다 포트가 삭제되었을수 있습니다')
+            }
+          })
+          .catch(err => console.error("PUT 요청 실패:", err));
+      })
+    }
+    function ret() {
+      fetch(`https://unautopartychat.onrender.com/api/server/${port}`)
+        .then(res => res.json())
+        .then(response => {
+          if (response.exists) {
+            response.data.forEach(row => {
+              const toutt = document.getElementById("tout");
+              toutt.textContent = `메세지: \n\n${row.talk}`;
+            });
+          }
+        })
+        .catch(err => console.error(err));
+
+    }
+    function showimg() {
+      const myForm = document.getElementById('imgshow'); // 폼 요소 선택
+
+      myForm.addEventListener('submit', async function (event) { // ← 여기에 async
+        event.preventDefault();
+        const url = document.getElementById("show").value
+        const img = document.getElementById("im")
+        img.src = url;
+        img.alt = "사용자 입력 이미지";
+        img.style.maxWidth = "25%";
+        img.style.height = "auto";
+      })
+    }
+    function wec() {
+    }
+    function deleteServer(port) {
+      fetch(`https://unautopartychat.onrender.com/api/server/${port}`, {
+        method: "DELETE",
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.deleted) {
+            alert("포트 삭제 완료");
+            location.reload();
+          } else {
+            alert("⚠️ 삭제 실패: " + (data.message || "원인을 알 수 없습니다."));
+          }
+        })
+        .catch(err => console.error("❌ DELETE 요청 실패:", err));
+    }
+
+  </script>
