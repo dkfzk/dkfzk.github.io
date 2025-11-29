@@ -17,7 +17,7 @@
       <button onclick="intor()">항목에 들어가기</button>
     </form>
 
-    <h3>아는 포트가 없다면? 아래에서 공개된 포트 찾아 참가하기</h3>
+    <h3>아래에서 공개된 항목 찾아 들어가기</h3>
     <div id="table-list"></div>
   </div>
   <div class="3p" style="display: none;">
@@ -26,14 +26,14 @@
   <div style="display: none;" class="2p">
     <form id="cl">
       <h3>항목 번호 입력</h3>
-      <input id="portinput" type="text" placeholder="포트입력">
+      <input id="portinput" type="text" placeholder="번호입력">
       <h3>일부공개(미체크)/완전공개(체크)</h3>
       <h4>일부공개시 항목번호 아는사람만 들어올수 있습니다 | 완전공개시 매인화면 리스트에서 당신의 항목을 찾을수 있습니다</h4>
       <input id="pubinput" type="checkbox" value=1>
       <h3>기물 이름과 한줄 설명을 입력하세요</h3>
       <h3>기물 이름, 작성자 정도가 적당합니다</h3>
       <input id="scinput" type="text" placeholder="이름 입력">
-      <button onclick="makeroom()">포트 시작!</button>
+      <button onclick="makeroom()">항목 열기</button>
     </form>
   </div>
   <div class="4p" style="display: none;">
@@ -49,14 +49,15 @@
   </div>
   <div style="display: none;" class = "3p">
     <br>
-    <pre id="tout" style="font-size: 16px" style="font-weight: bold;">항목 내용을 불러오지 못했으니 강제 불러오기를 눌러주세요</pre></br>
+    <pre id="tout" style="font-size: 16px" style="font-weight: bold;">불러오지 못했습니다 불러오기를 눌러주세요...</pre></br>
     <button onclick="ret()">강제 불러오기</button>
     <form id="imgshow">
       <input id="show" type="text">
-      <button onclick="showimg()">이미지 보이기</button>
+      <button onclick="showimg()">임시 이미지 불러오기</button>
       <img id="im">
     </form>
     <img>
+  <button onclick="vote()">추천!</button>
   </div>
   <div class="onlyw" style="display: none;">
     <button onclick="deleteServer(port)">항목 삭제</button>
@@ -78,7 +79,7 @@
         data.forEach(row => {
           const div = document.createElement("div");
           // 컬럼 이름이 testt니까 이렇게 접근
-          div.textContent = `포트: ${row.port} | 설명: ${row.script}`;
+          div.textContent = `항목: ${row.port} | 설명: ${row.script} | 투표수: ${row.vote}`;
           container.appendChild(div);
         });
       })
@@ -191,7 +192,7 @@
         const port1 = document.getElementById("inrinput").value;
         port = document.getElementById("inrinput").value;
 
-        if (!port1) return alert("⚠️ 포트 번호를 입력하세요!");
+        if (!port1) return alert("⚠️ 번호를 입력하세요!");
 
         try {
           const check = await fetch(`https://unautopartychat.onrender.com/api/server/${port1}`);
@@ -242,7 +243,7 @@
                     });
                     roomsc.style.display = 'block';
                   } else {
-                    roomsc.innerHTML = '해당 포트가 없습니다.';
+                    roomsc.innerHTML = '해당 항목이 없습니다.';
                     roomsc.style.display = 'block';
                   }
                 })
@@ -250,19 +251,26 @@
             } // end else (참가자)
           }
           else {
-            alert('이런 포트는 존재하지 않습니다')
+            alert('이런 기물은 존재하지 않습니다')
           }
           // end if (checkData.exists)
 
         } catch (err) {
           console.error("❌ 오류 발생:", err);
         }
-      }); 
-      
-      
-      console.log("eeeee");
-      ret();
-        // end addEventListener
+      });
+
+      fetch(`https://unautopartychat.onrender.com/api/server/${port1}`)
+        .then(res => res.json())
+        .then(response => {
+          if (response.exists) {
+            response.data.forEach(row => {
+              const toutt = document.getElementById("tout");
+              toutt.textContent = `${row.talk}`;
+            });
+          }
+        })
+        .catch(err => console.error(err));// end addEventListener
     } // end function intor
 
 
@@ -284,7 +292,7 @@
           .then(data => {
             if (data.updated) {
             } else {
-              alert('이 포트를 찾을수 없습니다 포트가 삭제되었을수 있습니다')
+              alert('이 항목를 찾을수 없습니다 문서가 삭제되었을수 있습니다')
             }
           })
           .catch(err => console.error("PUT 요청 실패:", err));
@@ -297,7 +305,7 @@
           if (response.exists) {
             response.data.forEach(row => {
               const toutt = document.getElementById("tout");
-              toutt.textContent = `메세지: \n\n${row.talk}`;
+              toutt.textContent = `${row.talk}`;
             });
           }
         })
@@ -326,7 +334,7 @@
         .then(res => res.json())
         .then(data => {
           if (data.deleted) {
-            alert("포트 삭제 완료");
+            alert("항목 삭제 완료");
             location.reload();
           } else {
             alert("⚠️ 삭제 실패: " + (data.message || "원인을 알 수 없습니다."));
@@ -334,5 +342,21 @@
         })
         .catch(err => console.error("❌ DELETE 요청 실패:", err));
     }
+
+    function vote() {
+      let port9 = port
+      const newtalk = document.getElementById('upr').value
+        fetch(`https://unautopartychat.onrender.com/api/server/${port9}`, {
+          method: "PUT"
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.updated) {
+            } else {
+              alert('이 항목를 찾을수 없습니다 문서가 삭제되었을수 있습니다')
+            }
+          })
+          .catch(err => console.error("PUT 요청 실패:", err));
+    };
 
   </script>

@@ -114,6 +114,26 @@ app.delete('/api/server/:port', async (req, res) => {
   }
 });
 
+app.put('/api/server/:port9', async (req, res) => {
+  try {
+    const port = req.params.port;
+    const { vote } = req.body;
+
+    const result = await pool.query(
+      'UPDATE server SET vote = vote + 1 WHERE port=$2',
+      [String(newtalk ?? ""), port]
+    );
+
+    res.json(result.rowCount > 0
+      ? { updated: true, message: '✅ 수정 성공' }
+      : { updated: false, message: '포트를 찾을 수 없습니다' }
+    );
+  } catch (err) {
+    console.error('❌ 수정 실패:', err);
+    res.status(500).json({ error: 'DB 수정 실패', detail: err.message });
+  }
+});
+
 // 4. 서버 시작
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ 서버 실행 중: http://localhost:${PORT}`));
