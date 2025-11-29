@@ -47,7 +47,7 @@
       <br>
     </form>
   </div>
-  <div style="display: none;" class = "3p">
+  <div style="display: none;" class="3p">
     <br>
     <pre id="tout" style="font-size: 16px" style="font-weight: bold;">불러오지 못했습니다 불러오기를 눌러주세요...</pre></br>
     <button onclick="ret()">강제 불러오기</button>
@@ -57,7 +57,10 @@
       <img id="im">
     </form>
     <img>
-  <button onclick="vote()">추천!</button>
+    <p>추천하기</p>
+    <button onclick="vote()">추천!</button>
+    <p>수정하기</p>
+    <button onclick="edi()">수정하기 ON</button>
   </div>
   <div class="onlyw" style="display: none;">
     <button onclick="deleteServer(port)">항목 삭제</button>
@@ -346,22 +349,27 @@
     function vote() {
       let port9 = port
       const newtalk = document.getElementById('upr').value
-        fetch(`https://unautopartychat.onrender.com/api/server/${port9}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            vote: 1,
-            port: port
-          })
+      fetch(`https://unautopartychat.onrender.com/api/server/${Number(port9)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.updated) {
+            alert("투표 완료");
+          } else {
+            alert("이 항목을 찾을 수 없습니다");
+          }
         })
-          .then(res => res.json())
-          .then(data => {
-            if (data.updated) { alert("투표 완료 중복 투표와 과한 투표수는 어뷰징으로 판단해 삭제될수 있습니다")
-            } else {
-              alert('이 항목를 찾을수 없습니다 문서가 삭제되었을수 있습니다')
-            }
-          })
-          .catch(err => console.error("PUT 요청 실패:", err));
+        .catch(err => console.error("PUT 요청 실패:", err));
+
     };
+
+    function edi() {
+      elements = document.getElementsByClassName('4p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'block';
+            }
+    }
 
   </script>
