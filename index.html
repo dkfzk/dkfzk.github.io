@@ -46,9 +46,11 @@
       <button onclick="upme()">수정</button>
       <br>
     </form>
+  </div>
+  <div style="display: none;" id = "3p">
     <br>
-    <pre id="tout" style="font-size: 16px" style="font-weight: bold;">메세지가 없습니다... 밑 버튼으로 갱신해보세요!</pre></br>
-    <button onclick="ret()">갱신</button>
+    <pre id="tout" style="font-size: 16px" style="font-weight: bold;">항목 내용을 불러오지 못했으니 강제 불러오기를 눌러주세요</pre></br>
+    <button onclick="ret()">강제 불러오기</button>
     <form id="imgshow">
       <input id="show" type="text">
       <button onclick="showimg()">이미지 보이기</button>
@@ -256,7 +258,17 @@
           console.error("❌ 오류 발생:", err);
         }
       }); 
-      ret() // end addEventListener
+      fetch(`https://unautopartychat.onrender.com/api/server/${port}`)
+        .then(res => res.json())
+        .then(response => {
+          if (response.exists) {
+            response.data.forEach(row => {
+              const toutt = document.getElementById("tout");
+              toutt.textContent = `메세지: \n\n${row.talk}`;
+            });
+          }
+        })
+        .catch(err => console.error(err)); // end addEventListener
     } // end function intor
 
 
