@@ -36,7 +36,7 @@
       <button onclick="makeroom()">포트 시작!</button>
     </form>
   </div>
-  <div class="3p" style="display: none;">
+  <div class="4p" style="display: none;">
     <div id="inroom"></div>
     <h3 id="wan">편집 가능 상태입니다</h3>
     <form id="ta">
@@ -141,7 +141,7 @@
               };
               if (wanjang == 1) {
                 const wanj = document.getElementById("wan")
-                wanj.textContent = `방장입니다`;
+                wanj.textContent = `편집 가능`;
                 elements = document.getElementsByClassName('onlyw');
                 for (let i = 0; i < elements.length; i++) {
                   elements[i].style.display = 'block';
@@ -149,7 +149,7 @@
               }
               else {
                 const wanj = document.getElementById("wan")
-                wanj.textContent = `참가자입니다`
+                wanj.textContent = `보기만 가능`
               };
 
 
@@ -214,11 +214,11 @@
 
             if (wanjang == 1) {
               const wanj = document.getElementById("wan");
-              wanj.textContent = `방장입니다`;
+              wanj.textContent = `편집 가능`;
             }
             else {
               const wanj = document.getElementById("wan");
-              wanj.textContent = `참가자입니다`;
+              wanj.textContent = `보기만 가능`;
               wec()
 
               port = port1;
@@ -255,7 +255,8 @@
         } catch (err) {
           console.error("❌ 오류 발생:", err);
         }
-      }); // end addEventListener
+      }); 
+      ret() // end addEventListener
     } // end function intor
 
 
