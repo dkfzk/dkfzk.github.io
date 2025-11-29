@@ -41,18 +41,19 @@ app.get('/api/server/', async (req, res) => {
 // 서버 추가
 app.post('/api/server', async (req, res) => {
   try {
-    const { port, pub, scr } = req.body;
+    const { port, pub, scr, pass } = req.body;
     const portInt = port;
     const pubBool = pub === true || pub === 'true';
+    const passw = pass;
 
     // 중복 체크
     const check = await pool.query('SELECT COUNT(*) FROM server WHERE port=$1', [portInt]);
     if (check.rows[0].count > 0)
       return res.status(200).json({ duplicated: true, message: '이미 존재하는 port입니다.' });
-
+    
     await pool.query(
-      'INSERT INTO server (port, pub,script) VALUES ($1, $2,$3)',
-      [portInt, pubBool, scr]
+      'INSERT INTO server (port, pub,script,pass) VALUES ($1, $2,$3,$4)',
+      [portInt, pubBool, scr, passw]
     );
 
     res.json({ duplicated: false, message: '✅ 값 추가 성공' });
@@ -111,6 +112,17 @@ app.delete('/api/server/:port', async (req, res) => {
   } catch (err) {
     console.error('❌ DELETE 요청 실패:', err);
     res.status(500).json({ error: 'DB 삭제 실패', detail: err.message });
+  }
+});
+
+app.get('/api/server/:pass', async (req, res) => {
+  try {
+    const port = req.params.pass;
+    const result = await pool.query('SELECT * FROM server WHERE pass=$1', [pass]);
+    res.json(result.rows.length ? { exists: true, data: result.rows } : { exists: false });
+  } catch (err) {
+    console.error('❌ 조회 실패:', err.message);
+    res.status(500).json({ error: 'DB 조회 실패', detail: err.message });
   }
 });
 

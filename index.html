@@ -16,6 +16,11 @@
       들어갈 항목 번호 입력 <input id="inrinput" type="text" placeholder="번호입력" required>
       <button onclick="intor()">항목에 들어가기</button>
     </form>
+    <p>또는</p>
+    <form>
+      편집할 항목의 암호 입력 <input id="passinput" type="password" placeholder="비밀번호입력" required>
+      <button onclick="intored()">편집하러가기</button>
+    </form>
 
     <h3>아는 포트가 없다면? 아래에서 공개된 포트 찾아 참가하기</h3>
     <div id="table-list"></div>
@@ -29,10 +34,13 @@
       <input id="portinput" type="text" placeholder="포트입력">
       <h3>일부공개(미체크)/완전공개(체크)</h3>
       <h4>일부공개시 항목번호 아는사람만 들어올수 있습니다 | 완전공개시 매인화면 리스트에서 당신의 항목을 찾을수 있습니다</h4>
+      <p>공유 여부는 수정이 불가하니 참고하주세요</p>
       <input id="pubinput" type="checkbox" value=1>
       <h3>기물 이름과 한줄 설명을 입력하세요</h3>
       <h3>기물 이름, 작성자 정도가 적당합니다</h3>
       <input id="scinput" type="text" placeholder="이름 입력">
+      <p>이 항목의 암호를 설정하세요 너무 쉬운 암호는 비추천합니다 + 비밀번호가 때려 맞춰져 문서 손상시 복구 못합니다</p>
+      <input id="passin" type="password" placeholder="암호 입력">
       <button onclick="makeroom()">포트 시작!</button>
     </form>
   </div>
@@ -47,8 +55,6 @@
       <br>
     </form>
     <br>
-    <pre id="tout" style="font-size: 16px" style="font-weight: bold;">메세지가 없습니다... 밑 버튼으로 갱신해보세요!</pre></br>
-    <button onclick="ret()">갱신</button>
     <form id="imgshow">
       <input id="show" type="text">
       <button onclick="showimg()">이미지 보이기</button>
@@ -121,7 +127,8 @@
           body: JSON.stringify({
             port: port,
             pub: Boolean(pub),
-            scr: document.getElementById('scinput').value
+            scr: document.getElementById('scinput').value,
+            pass: document.getElementById('passin').value
           })
         })
           .then(res => res.json())
@@ -256,7 +263,8 @@
         } catch (err) {
           console.error("❌ 오류 발생:", err);
         }
-      }); // end addEventListener
+      }); 
+      ret()
     } // end function intor
 
 
@@ -328,6 +336,84 @@
         })
         .catch(err => console.error("❌ DELETE 요청 실패:", err));
     }
+    
+    function intored() {
+      const myForm = document.getElementById('inr'); // 폼 요소 선택
+      const nick = document.getElementById('nick').value
+      myForm.addEventListener('submit', async function (event) { // ← 여기에 async
+        event.preventDefault(); // 페이지 새로고침 방지
+
+        pass = document.getElementById("inrinput").value;
+
+        if (!port1) return alert("⚠️ 항목 번호를 입력하세요!");
+
+        try {
+          const check = await fetch(`https://unautopartychat.onrender.com/api/server/${pass}`);
+          const checkData = await check.json();
+
+          if (checkData.exists) {
+
+            let elements = document.getElementsByClassName('1p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'none';
+            }
+
+            elements = document.getElementsByClassName('2p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'none';
+            }
+
+            elements = document.getElementsByClassName('3p');
+            for (let i = 0; i < elements.length; i++) {
+              elements[i].style.display = 'block';
+            }
+            wanjang = 1
+
+            if (wanjang == 1) {
+              const wanj = document.getElementById("wan");
+              wanj.textContent = `편집 가능`;
+            }
+            else {
+              const wanj = document.getElementById("wan");
+              wanj.textContent = `보기만 가능`;
+              wec()
+
+              port = port1;
+              const resultDiv = document.getElementById('viewport');
+              resultDiv.textContent = port;
+
+              const port2 = Number(document.getElementById("inrinput").value);
+              fetch(`https://unautopartychat.onrender.com/api/server/${pass}`)
+                .then(res => res.json())
+                .then(response => {
+                  console.log("서버 응답:", response);
+                  console.log("typeof port:", typeof pass, "value:", pass);
+
+                  const roomsc = document.getElementById('inroom');
+                  if (response.exists && Array.isArray(response.data)) {
+                    roomsc.innerHTML = '';
+                    response.data.forEach(row => {
+                      roomsc.innerHTML += `설명: ${row.script}`;
+                    });
+                    roomsc.style.display = 'block';
+                  } else {
+                    roomsc.innerHTML = '해당 포트가 없습니다.';
+                    roomsc.style.display = 'block';
+                  }
+                })
+                .catch(err => console.error(err));
+            } // end else (참가자)
+          }
+          else {
+            alert('이런 포트는 존재하지 않습니다')
+          }
+          // end if (checkData.exists)
+
+        } catch (err) {
+          console.error("❌ 오류 발생:", err);
+        }
+      }); // end addEventListener
+    } // end function intor
 
   </script>
 
