@@ -356,7 +356,7 @@
         })
           .then(res => res.json())
           .then(data => {
-            if (data.updated) {
+            if (data.updated) { alert("투표 완료 중복 투표와 과한 투표수는 어뷰징으로 판단해 삭제될수 있습니다")
             } else {
               alert('이 항목를 찾을수 없습니다 문서가 삭제되었을수 있습니다')
             }
