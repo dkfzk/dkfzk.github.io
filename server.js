@@ -119,8 +119,8 @@ app.put('/api/server/:port9', async (req, res) => {
     const port = req.params.port9;
     
     const result = await pool.query(
-      'UPDATE server SET vote = vote + 1 WHERE port=$2',
-      [vote, port]
+      'UPDATE server SET vote = vote + 1 WHERE port=$1',
+      [port]
     );
 
     res.json(result.rowCount > 0
