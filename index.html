@@ -347,7 +347,12 @@
       let port9 = port
       const newtalk = document.getElementById('upr').value
         fetch(`https://unautopartychat.onrender.com/api/server/${port9}`, {
-          method: "PUT"
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            vote: 1,
+            port: port
+          })
         })
           .then(res => res.json())
           .then(data => {
