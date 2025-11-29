@@ -117,11 +117,10 @@ app.delete('/api/server/:port', async (req, res) => {
 app.put('/api/server/:port9', async (req, res) => {
   try {
     const port = req.params.port9;
-    const { vote } = req.body;
-
+    
     const result = await pool.query(
       'UPDATE server SET vote = vote + 1 WHERE port=$2',
-      [String(newtalk ?? ""), port]
+      [vote, port]
     );
 
     res.json(result.rowCount > 0
