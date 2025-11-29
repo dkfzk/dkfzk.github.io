@@ -117,7 +117,7 @@ app.delete('/api/server/:port', async (req, res) => {
 app.put('/api/server/:port9', async (req, res) => {
   try {
     const port = req.params.port9;
-    
+
     const result = await pool.query(
       'UPDATE server SET vote = vote + 1 WHERE port=$1',
       [port]
@@ -132,6 +132,7 @@ app.put('/api/server/:port9', async (req, res) => {
     res.status(500).json({ error: 'DB 수정 실패', detail: err.message });
   }
 });
+
 
 // 4. 서버 시작
 const PORT = process.env.PORT || 3000;
