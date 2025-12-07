@@ -17,10 +17,10 @@ app.use(cors({
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'testdb_8gh2_user',          // User
-  host: 'dpg-d43dl1hr0fns73etg7lg-a', // Host
-  database: 'testdb_8gh2',        // Database
-  password: 'GHUvNRQmwSXQ1BCjTfxJjJlV1lTn7UGK',  // Password
+  user: 'testdb_536z_user',          // User
+  host: 'dpg-d4qe6g95pdvs738mggeg-a', // Host
+  database: 'testdb_536z',        // Database
+  password: 'P6AS8ySy7ZMKTqdPEBDtkiJcfixpCibT',  // Password
   port: 5432,
 });
 
