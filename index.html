@@ -211,31 +211,27 @@
 
 }
 
-function searchIdeas(){
+function searchIdeas() {
 
     const keyword = document
         .getElementById("searchInput")
         .value
-        .toLowerCase()
-        .trim();
+        .trim()
+        .toLowerCase();
 
-    if(keyword===""){
+    // 검색어가 없으면 전체 목록
+    if (keyword.length === 0) {
         renderIdeas(allIdeas);
         return;
     }
 
-    const filtered = allIdeas.filter(idea=>{
-
-        return (
-            idea.keyword.toLowerCase().includes(keyword) ||
-            idea.title.toLowerCase().includes(keyword) ||
-            idea.content.toLowerCase().includes(keyword)
-        );
-
-    });
+    const filtered = allIdeas.filter(idea =>
+        idea.keyword.toLowerCase().includes(keyword) ||
+        idea.title.toLowerCase().includes(keyword) ||
+        idea.content.toLowerCase().includes(keyword)
+    );
 
     renderIdeas(filtered);
-
 }
 
 </script>
