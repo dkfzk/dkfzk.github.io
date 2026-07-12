@@ -19,10 +19,9 @@
     </div>
     <div class="2p" style="display: none;">
         <h1>아이디어 업로드</h1>
-        <div class="hovertext" data-hover="ㄴ다른 사람들이 키워드 검색으로 항목을 찾을 수 있게 합니다">
-            <h3>아이디어의 키워드 입력(ex : 증강체스 카드 | 변체클럽 아이디어)</h3>
+        <div class="hovertext" data-hover="ㄴ다른 사람들이 키워드 검색으로 항목을 찾을 수 있게 합니다"><h3>아이디어의 키워드 입력(ex : 증강체스 카드 | 변체클럽 아이디어)</h3>
         </div>
-        <input style="margin-top: 30px;;" id="keyinput" type="text" placeholder="키워드 입력">
+        <input style="margin-top: 30px;;"  id="keyinput" type="text" placeholder="키워드 입력">
         <h3 style="margin-top: 30px;;">아이디어의 제목 입력</h3>
         <input id="titleinput" type="text" placeholder="제목 입력">
         <h3 style="margin-top: 30px;;">당신의 아이디어에 관한 설명</h3>
@@ -36,98 +35,96 @@
 
 <script>
 
-    function totwop() {
-        document.getElementsByClassName("1p")[0].style.display = "none";
-        document.getElementsByClassName("2p")[0].style.display = "block";
+function totwop() {
+    document.getElementsByClassName("1p")[0].style.display = "none";
+    document.getElementsByClassName("2p")[0].style.display = "block";
+}
+
+function cantwop() {
+    document.getElementsByClassName("1p")[0].style.display = "block";
+    document.getElementsByClassName("2p")[0].style.display = "none";
+}
+
+// 페이지가 열리면 자동으로 목록 불러오기
+window.addEventListener("DOMContentLoaded", () => {
+    loadIdeas();
+});
+
+// =========================
+// 업로드
+// =========================
+async function uploadIdea() {
+
+    const keyword = document.getElementById("keyinput").value.trim();
+    const title = document.getElementById("titleinput").value.trim();
+    const content = document.getElementById("inp").value.trim();
+
+    if (!keyword || !title || !content) {
+        alert("모든 항목을 입력해주세요.");
+        return;
     }
 
-    function cantwop() {
-        document.getElementsByClassName("1p")[0].style.display = "block";
-        document.getElementsByClassName("2p")[0].style.display = "none";
-    }
+    try {
 
-    // 페이지가 열리면 자동으로 목록 불러오기
-    window.addEventListener("DOMContentLoaded", () => {
-        loadIdeas();
-    });
+        const response = await fetch("https://unautopartychat.onrender.com/upload", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                keyword,
+                title,
+                content
+            })
+        });
 
-    // =========================
-    // 업로드
-    // =========================
-    async function uploadIdea() {
+        const result = await response.json();
 
-        const keyword = document.getElementById("keyinput").value.trim();
-        const title = document.getElementById("titleinput").value.trim();
-        const content = document.getElementById("inp").value.trim();
+        if (response.ok) {
 
-        if (!keyword || !title || !content) {
-            alert("모든 항목을 입력해주세요.");
-            return;
-        }
+            alert("업로드 완료!");
 
-        try {
+            document.getElementById("keyinput").value = "";
+            document.getElementById("titleinput").value = "";
+            document.getElementById("inp").value = "";
 
-            const response = await fetch("https://unautopartychat.onrender.com/upload", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    keyword,
-                    title,
-                    content
-                })
-            });
+            cantwop();
 
-            const result = await response.json();
+            loadIdeas();
 
-            if (response.ok) {
+        } else {
 
-                alert("업로드 완료!");
-
-                document.getElementById("keyinput").value = "";
-                document.getElementById("titleinput").value = "";
-                document.getElementById("inp").value = "";
-
-                cantwop();
-
-                loadIdeas();
-
-            } else {
-
-                alert(result.error);
-
-            }
-
-        } catch (err) {
-
-            console.error(err);
-            alert("서버 연결 실패");
+            alert(result.error);
 
         }
 
+    } catch (err) {
+
+        console.error(err);
+        alert("서버 연결 실패");
+
     }
 
-    // =========================
-    // 목록 불러오기
-    // =========================
-    async function loadIdeas() {
+}
 
-        try {
+// =========================
+// 목록 불러오기
+// =========================
+async function loadIdeas() {
 
-            const response = await fetch("https://unautopartychat.onrender.com/ideas");
+    try {
 
-            const ideas = await response.json();
+        const response = await fetch("https://unautopartychat.onrender.com/ideas");
 
-            const list = document.getElementById("ideaList");
+        const ideas = await response.json();
 
-            list.innerHTML = "";
+        const list = document.getElementById("ideaList");
 
-            const liked = localStorage.getItem("liked_" + idea.id);
+        list.innerHTML = "";
 
-            ideas.forEach(idea => {
+        ideas.forEach(idea => {
 
-                list.innerHTML += `
+            list.innerHTML += `
                 <div class="card mb-3">
                     <div class="card-body">
 
@@ -138,8 +135,7 @@
                         <p class="idea-content">${idea.content}</p>
 
                         <button
-                            class="btn ${liked ? "btn-secondary" : "btn-outline-primary"}"
-                            ${liked ? "disabled" : ""}
+                            class="btn btn-outline-primary"
                             onclick="likeIdea(${idea.id})">
                             👍 ${idea.likes}
                         </button>
@@ -148,51 +144,35 @@
                 </div>
             `;
 
-            });
+        });
 
-        } catch (err) {
+    } catch (err) {
 
-            console.error(err);
-
-        }
+        console.error(err);
 
     }
 
-    // =========================
-    // 좋아요
-    // =========================
-    async function likeIdea(id) {
+}
 
-        // 이미 눌렀는지 확인
-        if (localStorage.getItem("liked_" + id)) {
-            alert("이미 추천한 아이디어입니다.");
-            return;
-        }
+// =========================
+// 좋아요
+// =========================
+async function likeIdea(id) {
 
-        try {
+    try {
 
-            const response = await fetch(
-                `https://unautopartychat.onrender.com/like/${id}`,
-                {
-                    method: "POST"
-                }
-            );
+        await fetch(`https://unautopartychat.onrender.com/like/${id}`, {
+            method: "POST"
+        });
 
-            if (response.ok) {
+        loadIdeas();
 
-                // 기록
-                localStorage.setItem("liked_" + id, "true");
+    } catch (err) {
 
-                loadIdeas();
-
-            }
-
-        } catch (err) {
-
-            console.error(err);
-
-        }
+        console.error(err);
 
     }
+
+}
 
 </script>
