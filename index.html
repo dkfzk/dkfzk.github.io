@@ -15,6 +15,7 @@
         <button class="btn btn-outline-secondary" onclick="totwop()">아이디어 업로드</button>
         <h3>OR</h3>
         <h2>아래에서 다른 사람들의 아이디어 찾기</h2>
+        <div id="ideaList" style="margin-top:30px;"></div>
     </div>
     <div class="2p" style="display: none;">
         <h1>아이디어 업로드</h1>
@@ -76,6 +77,8 @@
             document.getElementById("inp").value = "";
 
             cantwop();
+
+            loadIdeas();
         } else {
             alert(result.error);
         }
@@ -84,5 +87,66 @@
         console.error(err);
         alert("서버 연결 실패");
     }
+
+    window.onload = function () {
+    loadIdeas();
+};
+
+async function loadIdeas() {
+
+    try {
+
+        const response = await fetch("https://unautopartychat.onrender.com/ideas");
+
+        const ideas = await response.json();
+
+        const list = document.getElementById("ideaList");
+
+        list.innerHTML = "";
+
+        ideas.forEach(idea => {
+
+            list.innerHTML += `
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                        <h4>${idea.title}</h4>
+
+                        <p>
+                            <b>키워드</b> :
+                            ${idea.keyword}
+                        </p>
+
+                        <p>${idea.content}</p>
+
+                        <button
+                            class="btn btn-outline-primary"
+                            onclick="likeIdea(${idea.id})">
+                            👍 ${idea.likes}
+                        </button>
+
+                    </div>
+                </div>
+            `;
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+}
+
+async function likeIdea(id){
+
+    await fetch(`https://unautopartychat.onrender.com/like/${id}`,{
+        method:"POST"
+    });
+
+    loadIdeas();
+
+}
 }
 </script>
