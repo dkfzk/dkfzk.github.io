@@ -35,16 +35,26 @@
 
 <script>
 
-    function totwop(){
-        document.getElementsByClassName("1p")[0].style.display = "none"
-        document.getElementsByClassName("2p")[0].style.display = "block"
-    }
-    function cantwop(){
-        document.getElementsByClassName("1p")[0].style.display = "block"
-        document.getElementsByClassName("2p")[0].style.display = "none"
-    }
+function totwop() {
+    document.getElementsByClassName("1p")[0].style.display = "none";
+    document.getElementsByClassName("2p")[0].style.display = "block";
+}
 
-    async function uploadIdea() {
+function cantwop() {
+    document.getElementsByClassName("1p")[0].style.display = "block";
+    document.getElementsByClassName("2p")[0].style.display = "none";
+}
+
+// 페이지가 열리면 자동으로 목록 불러오기
+window.addEventListener("DOMContentLoaded", () => {
+    loadIdeas();
+});
+
+// =========================
+// 업로드
+// =========================
+async function uploadIdea() {
+
     const keyword = document.getElementById("keyinput").value.trim();
     const title = document.getElementById("titleinput").value.trim();
     const content = document.getElementById("inp").value.trim();
@@ -55,6 +65,7 @@
     }
 
     try {
+
         const response = await fetch("https://unautopartychat.onrender.com/upload", {
             method: "POST",
             headers: {
@@ -70,6 +81,7 @@
         const result = await response.json();
 
         if (response.ok) {
+
             alert("업로드 완료!");
 
             document.getElementById("keyinput").value = "";
@@ -79,19 +91,25 @@
             cantwop();
 
             loadIdeas();
+
         } else {
+
             alert(result.error);
+
         }
 
     } catch (err) {
+
         console.error(err);
         alert("서버 연결 실패");
+
     }
 
-    window.onload = function () {
-    loadIdeas();
-};
+}
 
+// =========================
+// 목록 불러오기
+// =========================
 async function loadIdeas() {
 
     try {
@@ -112,10 +130,7 @@ async function loadIdeas() {
 
                         <h4>${idea.title}</h4>
 
-                        <p>
-                            <b>키워드</b> :
-                            ${idea.keyword}
-                        </p>
+                        <p><b>키워드 :</b> ${idea.keyword}</p>
 
                         <p class="idea-content">${idea.content}</p>
 
@@ -139,18 +154,25 @@ async function loadIdeas() {
 
 }
 
-async function likeIdea(id){
+// =========================
+// 좋아요
+// =========================
+async function likeIdea(id) {
 
-    await fetch(`https://unautopartychat.onrender.com/like/${id}`,{
-        method:"POST"
-    });
+    try {
 
-    loadIdeas();
+        await fetch(`https://unautopartychat.onrender.com/like/${id}`, {
+            method: "POST"
+        });
+
+        loadIdeas();
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
 
 }
-}
 
-window.addEventListener("DOMContentLoaded", () => {
-    loadIdeas();
-});
 </script>
