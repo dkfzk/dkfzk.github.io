@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 
-app.get('/', (req, res) => res.send('✅ API 서버 동작 중'));
+app.get('/', (req, res) => res.send('✅ API 서버 동작 중 99'));
 
 app.use(cors({
   origin: 'https://unatoparty.netlify.app'
