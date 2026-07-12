@@ -3,7 +3,7 @@ const cors = require('cors');
 
 app.use(cors({
     origin: [
-        "https://dkfzk.github.io",
+        "https://dkfzk.github.io"
     ]
 }));
 
