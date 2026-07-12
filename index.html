@@ -123,12 +123,6 @@
 
             allIdeas = await response.json();
 
-            const list = document.getElementById("ideaList");
-
-            list.innerHTML = "";
-
-            const liked = localStorage.getItem("liked_" + idea.id);
-
             renderIdeas(allIdeas);
 
         } catch (err) {
@@ -176,17 +170,17 @@
 
     }
 
-    function renderIdeas(ideas){
+    function renderIdeas(ideas) {
 
-    const list = document.getElementById("ideaList");
+        const list = document.getElementById("ideaList");
 
-    list.innerHTML = "";
+        list.innerHTML = "";
 
-    ideas.forEach(idea=>{
+        ideas.forEach(idea => {
 
-        const liked = localStorage.getItem("liked_" + idea.id);
+            const liked = localStorage.getItem("liked_" + idea.id);
 
-        list.innerHTML += `
+            list.innerHTML += `
         <div class="card mb-3">
             <div class="card-body">
 
@@ -207,31 +201,31 @@
         </div>
         `;
 
-    });
+        });
 
-}
-
-function searchIdeas() {
-
-    const keyword = document
-        .getElementById("searchInput")
-        .value
-        .trim()
-        .toLowerCase();
-
-    // 검색어가 없으면 전체 목록
-    if (keyword.length === 0) {
-        renderIdeas(allIdeas);
-        return;
     }
 
-    const filtered = allIdeas.filter(idea =>
-        idea.keyword.toLowerCase().includes(keyword) ||
-        idea.title.toLowerCase().includes(keyword) ||
-        idea.content.toLowerCase().includes(keyword)
-    );
+    function searchIdeas() {
 
-    renderIdeas(filtered);
-}
+        const keyword = document
+            .getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+        // 검색어가 없으면 전체 목록
+        if (keyword.length === 0) {
+            renderIdeas(allIdeas);
+            return;
+        }
+
+        const filtered = allIdeas.filter(idea =>
+            idea.keyword.toLowerCase().includes(keyword) ||
+            idea.title.toLowerCase().includes(keyword) ||
+            idea.content.toLowerCase().includes(keyword)
+        );
+
+        renderIdeas(filtered);
+    }
 
 </script>
