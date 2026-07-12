@@ -96,3 +96,9 @@ app.post("/like/:id", async (req, res) => {
     }
 
 });
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT} 바로 바이브 코딩 조지기 ㅋㅋ`);
+});
