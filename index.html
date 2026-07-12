@@ -122,6 +122,8 @@ async function loadIdeas() {
 
         list.innerHTML = "";
 
+        const liked = localStorage.getItem("liked_" + idea.id);
+
         ideas.forEach(idea => {
 
             list.innerHTML += `
@@ -135,7 +137,8 @@ async function loadIdeas() {
                         <p class="idea-content">${idea.content}</p>
 
                         <button
-                            class="btn btn-outline-primary"
+                            class="btn ${liked ? "btn-secondary" : "btn-outline-primary"}"
+                            ${liked ? "disabled" : ""}
                             onclick="likeIdea(${idea.id})">
                             👍 ${idea.likes}
                         </button>
@@ -159,15 +162,31 @@ async function loadIdeas() {
 // =========================
 async function likeIdea(id) {
 
+    // 이미 눌렀는지 확인
+    if(localStorage.getItem("liked_" + id)){
+        alert("이미 추천한 아이디어입니다.");
+        return;
+    }
+
     try {
 
-        await fetch(`https://unautopartychat.onrender.com/like/${id}`, {
-            method: "POST"
-        });
+        const response = await fetch(
+            `https://unautopartychat.onrender.com/like/${id}`,
+            {
+                method:"POST"
+            }
+        );
 
-        loadIdeas();
+        if(response.ok){
 
-    } catch (err) {
+            // 기록
+            localStorage.setItem("liked_" + id, "true");
+
+            loadIdeas();
+
+        }
+
+    } catch(err){
 
         console.error(err);
 
