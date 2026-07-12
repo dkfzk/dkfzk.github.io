@@ -15,10 +15,11 @@ app.get('/', (req, res) => res.send('✅ API 서버 동작 중 99'));
 const { Pool } = require("pg");
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+  user: 'dkfzk',
+  host: 'dpg-d99h9dbtqb8s73aji7a0-a',
+  database: 'vcidb',
+  password: 'm4FQqB56JO82UJlKG4z0KkurQjRnsY8r',
+  port: 5432,
 });
 
 app.post("/upload", async (req, res) => {
