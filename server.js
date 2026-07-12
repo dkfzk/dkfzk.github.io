@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 
-app.get('/', (req, res) => res.send('✅ API 서버 동작 중 99'));
+app.get('/', (req, res) => res.send('✅ API 서버 동작 중'));
 
 app.use(cors({
   origin: 'https://unatoparty.netlify.app'
@@ -17,10 +17,10 @@ app.use(cors({
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'dkfzk',          // User
-  host: 'dpg-d99h9dbtqb8s73aji7a0-a', // Host
-  database: 'vcidb',        // Database
-  password: 'm4FQqB56JO82UJlKG4z0KkurQjRnsY8r',  // Password
+  user: 'testdb_8gh2_user',          // User
+  host: 'dpg-d43dl1hr0fns73etg7lg-a', // Host
+  database: 'testdb_8gh2',        // Database
+  password: 'GHUvNRQmwSXQ1BCjTfxJjJlV1lTn7UGK',  // Password
   port: 5432,
 });
 
@@ -113,27 +113,6 @@ app.delete('/api/server/:port', async (req, res) => {
     res.status(500).json({ error: 'DB 삭제 실패', detail: err.message });
   }
 });
-
-app.put('/api/server/:port9', async (req, res) => {
-  try {
-    const port = parseInt(req.params.port9, 10);
-
-    const result = await pool.query(
-      'UPDATE server SET vote = vote + 1 WHERE port=$1',
-      [port]
-    );
-
-    res.json(result.rowCount > 0
-      ? { updated: true, message: '✅ 수정 성공' }
-      : { updated: false, message: '❌ 해당 포트 row 없음' }
-    );
-  } catch (err) {
-    console.error('❌ 수정 실패:', err);
-    res.status(500).json({ error: 'DB 수정 실패', detail: err.message });
-  }
-});
-
-
 
 // 4. 서버 시작
 const PORT = process.env.PORT || 3000;
