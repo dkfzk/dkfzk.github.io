@@ -1,119 +1,190 @@
 // 1. 모듈 불러오기
 const express = require('express');
-import cors from 'cors';
+const sql = require('mssql');
 const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
-
 app.get('/', (req, res) => res.send('✅ API 서버 동작 중'));
+// 2. SQL Server 연결 설정
+const config = {
+  user: 'sa',
+  password: 'e4e5ke2!!',
+  server: 'whgudwnsdml-01\\SQLEXPRESS', // ← test-db.js에서 성공했던 그대로
+  database: 'testdb',
+  options: {
+    encrypt: false,
+    trustServerCertificate: true
+  }
+};
 
-app.use(cors({
-  origin: 'https://unatoparty.netlify.app'
-}));
-
-
-// 2. PostgreSQL 연결 설정
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: 'testdb_8gh2_user',          // User
-  host: 'dpg-d43dl1hr0fns73etg7lg-a', // Host
-  database: 'testdb_8gh2',        // Database
-  password: 'GHUvNRQmwSXQ1BCjTfxJjJlV1lTn7UGK',  // Password
-  port: 5432,
-});
-
-
-// 3. API 엔드포인트
-
-// 전체 서버 공개 리스트
-app.get('/api/server/', async (req, res) => {
+// 3. API 엔드포인트 예시
+app.get('/api/Table_1/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM server WHERE pub = true');
-    res.json(result.rows);
+    // DB 연결
+    await sql.connect(config);
+    const result = await sql.query`
+      SELECT * FROM server WHERE pub = 1
+    `;
+    res.json(result.recordset);
   } catch (err) {
     console.error('❌ API 호출 실패:', err.message);
-    res.status(500).json({ error: "DB 조회 실패", detail: err.message });
+    res.status(500).send('DB 쿼리 실패');
   }
 });
 
-// 서버 추가
 app.post('/api/server', async (req, res) => {
   try {
-    const { port, pub, scr } = req.body;
-    const portInt = port;
-    const pubBool = pub === true || pub === 'true';
+    let { port, pub, scr } = req.body;
+    port = parseInt(port);
+    pub = pub === true || pub === 'true' ? 1 : 0;
+
+    const pool = await sql.connect(config);
+    const request = pool.request();
+
+    request.input('port', sql.Int, port);
+    request.input('pub', sql.Bit, pub);
+    request.input('scr', sql.NVarChar(100), scr);
+
 
     // 중복 체크
-    const check = await pool.query('SELECT COUNT(*) FROM server WHERE port=$1', [portInt]);
-    if (check.rows[0].count > 0)
-      return res.status(200).json({ duplicated: true, message: '이미 존재하는 port입니다.' });
-
-    await pool.query(
-      'INSERT INTO server (port, pub,script) VALUES ($1, $2,$3)',
-      [portInt, pubBool, scr]
+    const check = await request.query(
+      'SELECT COUNT(*) AS count FROM server WHERE port = @port'
     );
 
-    res.json({ duplicated: false, message: '✅ 값 추가 성공' });
+    if (check.recordset[0].count > 0) {
+      return res.status(200).json({
+        message: '⚠️ 이미 존재하는 port입니다.',
+        duplicated: true
+      });
+    }
+
+    // 추가
+    await request.query(
+      'INSERT INTO server (port, pub, cannot,script) VALUES (@port, @pub, 1,@scr)'
+    );
+
+    res.json({ message: '✅ 값 추가 성공', duplicated: false });
+
   } catch (err) {
     console.error('❌ 값 추가 실패:', err);
-    res.status(500).json({ error: "DB 추가 실패", detail: err.message });
+    res.status(500).json({ error: 'DB 추가 실패' });
   }
 });
 
-// 특정 포트 조회
-app.get('/api/server/:port', async (req, res) => {
+
+app.get('/api/server/:inputPort', async (req, res) => {
+  const inputPort = parseInt(req.params.inputPort);
   try {
-    const port = req.params.port;
-    const result = await pool.query('SELECT * FROM server WHERE port=$1', [port]);
-    res.json(result.rows.length ? { exists: true, data: result.rows } : { exists: false });
+    await sql.connect(config);
+    const result = await sql.query`
+      SELECT * FROM server WHERE port = ${inputPort}
+    `;
+    if (result.recordset.length > 0) {
+      res.json({ exists: true, data: result.recordset });
+    } else {
+      res.json({ exists: false });
+    }
   } catch (err) {
     console.error('❌ 조회 실패:', err.message);
-    res.status(500).json({ error: 'DB 조회 실패', detail: err.message });
+    res.status(500).json({ error: 'DB 조회 실패' });
   }
 });
 
-// 특정 포트 수정
 app.put('/api/server/:port', async (req, res) => {
   try {
-    const port = req.params.port;
-    const { newtalk } = req.body;
+    const port = parseInt(req.params.port);
+    let { newtalk } = req.body;
+    newtalk = String(newtalk ?? ""); // ✅ undefined/null 방지 + 문자열 변환
 
-    const result = await pool.query(
-      'UPDATE server SET talk=$1 WHERE port=$2',
-      [String(newtalk ?? ""), port]
-    );
+    const pool = await sql.connect(config);
+    const request = pool.request();
 
-    res.json(result.rowCount > 0
-      ? { updated: true, message: '✅ 수정 성공' }
-      : { updated: false, message: '포트를 찾을 수 없습니다' }
-    );
+    request.input('port', sql.Int, port);
+    request.input('newtalk', sql.NVarChar(sql.MAX), newtalk); // ✅ 추가
+
+    const result = await request.query(`
+      UPDATE server
+      SET talk = @newtalk
+      WHERE port = @port
+    `);
+
+    if (result.rowsAffected[0] > 0) {
+    } else {
+      res.status(404).json({ message: '이 포트를 찾을수 없습니다 방장이 서버를 삭제했을수 있습니다', updated: false });
+    }
+
   } catch (err) {
     console.error('❌ 수정 실패:', err);
-    res.status(500).json({ error: 'DB 수정 실패', detail: err.message });
+    res.status(500).json({ error: 'DB 수정 실패' });
   }
 });
 
-// 특정 포트 삭제
+app.get('/api/server/:port2', async (req, res) => {
+  try {
+    const port2 = parseInt(req.params.port2);
+    console.log("조회 포트:", port2);
+
+    const pool = await sql.connect(config);
+    const request = pool.request();
+
+    // 타입 지정
+    request.input('port', sql.Int, port2);
+
+    // 반드시 @port 사용
+    const result = await request.query('SELECT * FROM server WHERE port = @port2');
+
+    console.log("조회 결과:", result.recordset);
+
+    if (result.recordset.length > 0) {
+      res.json({ exists: true, data: result.recordset });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (err) {
+    console.error('❌ 조회 실패:', err.message);
+    res.status(500).json({ error: 'DB 조회 실패' });
+  }
+});
+
+// DELETE /api/server/:port
 app.delete('/api/server/:port', async (req, res) => {
   try {
-    const port = req.params.port;
-    if (isNaN(port))
+    const port = parseInt(req.params.port);
+    if (isNaN(port)) {
       return res.status(400).json({ deleted: false, message: '유효하지 않은 포트 번호입니다.' });
+    }
 
-    const result = await pool.query('DELETE FROM server WHERE port=$1', [port]);
+    const pool = await sql.connect(config);
+    const request = pool.request();
+    request.input('port', sql.Int, port);
 
-    res.json(result.rowCount > 0
-      ? { deleted: true, message: '✅ 삭제 성공' }
-      : { deleted: false, message: '해당 포트가 존재하지 않습니다.' }
-    );
+    const result = await request.query(`
+      DELETE FROM server
+      WHERE port = @port
+    `);
+
+    if (result.rowsAffected[0] > 0) {
+      res.json({ deleted: true, message: '삭제 성공' });
+    } else {
+      res.status(404).json({ deleted: false, message: '해당 포트가 존재하지 않습니다.' });
+    }
+
   } catch (err) {
     console.error('❌ DELETE 요청 실패:', err);
-    res.status(500).json({ error: 'DB 삭제 실패', detail: err.message });
+    res.status(500).json({ deleted: false, message: 'DB 삭제 실패' });
   }
 });
 
+
+
+
+
+
+
+
 // 4. 서버 시작
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ 서버 실행 중: http://localhost:${PORT}`));
+app.listen(3000, () => {
+  console.log('✅ 서버 실행 중: http://localhost:3000');
+});
