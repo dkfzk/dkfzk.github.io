@@ -1,6 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 
+app.use(cors({
+    origin: [
+        "https://dkfzk.github.io",
+    ]
+}));
+
 const app = express();
 app.use(express.json());
 
