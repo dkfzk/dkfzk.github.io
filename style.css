@@ -11,52 +11,610 @@ body {
   padding: 1em;
 }
 
-.btn.btn-outline-secondary{
-  margin-bottom: 0.2cm;
+.btn.btn-outline-secondary {
+  margin-bottom: 1cm;
   background-color: white;
   color: black;
 }
 
-/* hoverText */
-.hovertext {
-    position: relative;
-    border-bottom: 1px
+.hidden {
+  display: none;
 }
 
-.hovertext:before {
-    content: attr(data-hover);
-    visibility: hidden;
-    opacity: 0;
-    width: max-content;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px 5px;
-    transition: opacity 1s ease-in-out;
-
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    top: 110%;
+#home-screen button {
+  font-size: 1.2rem;
+  padding: 0.5em 1em;
+  cursor: pointer;
 }
 
-.hovertext:hover:before {
-    opacity: 1;
-    visibility: visible;
-    margin-left: 35%;
+#game-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#inp {
-  resize: none;
-  width: 600px;
-  height: 300px;
+#chessboard {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  /* width: 80vmin; */
+  /* height: 80vmin; */
+  width: 560px;
+  height: 560px;
+  position:relative;
+  /* border: 2px solid #555; */
+}
+
+.square {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.square.light {
+  background-color: #ffffff;
+}
+
+.square.dark {
+  background-color: #aaaaaa;
+}
+
+.emp {
+  width: 70px;
+  height: 70px;
+  z-index: 10;
+  background-color: rgb(237, 53, 53);
+}
+
+.piece {
+  height: 50px;
+  width: 50px;
+  -webkit-user-drag: none;
+  user-select: none;
+  position: absolute;
+}
+
+.move-node {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  /* display: flex; */
+  display: block;
+  background-image: url(https://lab.en-passant.org/pieces/node_move.svg);
+  /* opacity: 0.5; */
+  filter: invert() brightness(0.5);
+  background-repeat: no-repeat;
+  background-position: center;
+  /* align-items: center; */
+  /* justify-content: center; */
+  z-index: 10;
+  /* touch-action: none; */
+}
+
+/* .move-node::after {
+  content: '';
+  display: block;
+  border-radius: 50%;
+}
+
+.move-node.move::after {
+  width: 30%;
+  height: 30%;
+  background-color: rgba(80, 80, 80, 0.5);
+} */
+
+.move-node.take {
+  background-image: url(https://lab.en-passant.org/pieces/node_take.svg);
+}
+
+.move-node.take-move {
+  background-image: url(https://lab.en-passant.org/pieces/node_take-move.svg);
+}
+
+.move-node.catch {
+  background-image: url(https://lab.en-passant.org/pieces/node_catch.svg);
+}
+
+.move-node.void {
+  background-image: url(https://lab.en-passant.org/pieces/node_void.svg);
+}
+
+.move-node.shift {
+  background-image: url(https://lab.en-passant.org/pieces/node_shift.svg);
+}
+
+.move-node.pause {
+  background-image: url(https://lab.en-passant.org/pieces/node_pause.svg);
+}
+
+.move-node.block {
+  background-image: url(https://lab.en-passant.org/pieces/node_block.svg);
+}
+
+.move-node.take-jump {
+  background-image: url(https://lab.en-passant.org/pieces/node_jump.svg);
+}
+
+.move-node.take-fake {
+  background-image: url(https://lab.en-passant.org/pieces/node_take.svg);
+}
+
+.move-node.jump-fake {
+  background-image: url(https://lab.en-passant.org/pieces/node_jump.svg);
+}
+
+.move-node.take-jump-long {
+  background-image: url(https://lab.en-passant.org/pieces/node_jump.svg);
+}
+
+.move-node.shift-jump {
+  background-image: url(https://lab.en-passant.org/pieces/node_shift.svg);
+}
+
+#labapp {
+  display: grid;
+  grid-template-columns: 700px auto;
+}
+
+#labapp textarea {
+  font-family: 'Consolas';
+  outline: solid 1px #b1b1b1;
   background-color: #282c34;
+  border-radius: 8px;
+  font-size: 20px;
   color: white;
+  padding: 10px;
 }
 
-.idea-content{
-    white-space: pre-wrap;
+#switchturn,
+#reset,
+#quit {
+  padding: 8px;
+  margin: 8px;
 }
-.card{
-    background-color: #103c34;
-  color: white;
+
+#skins {
+  grid-template-columns: repeat(auto-fill, 80px);
+  justify-content: space-between;
+  outline: solid 1px #b1b1b1;
+  background-color: #282c34;
+  grid-auto-flow: row;
+  overflow-y: scroll;
+  border-radius: 8px;
+  max-height: 300px;
+  max-width: 800px;
+  row-gap: 10px;
+  display: grid;
+  padding: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #9dbdff;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #6196ff;
+}
+
+#skins div:not(.text) {
+  text-align-last: center;
+}
+
+#skins div:not(.text) img {
+  margin-bottom: 8px;
+  height: 60px;
+}
+
+
+.txw {
+  -webkit-text-stroke: 3px rgb(0, 0, 0);
+  /* 두께와 색상 */
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+}
+
+.txb {
+  color: #000;
+}
+
+.smalltxb {
+  color: #000;
+  font-size: 120%;
+  margin-top: 0.75cm;
+}
+
+.smalltxw {
+  -webkit-text-stroke: 1px rgb(0, 0, 0);
+  /* 두께와 색상 */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  color: #ffffff;
+  font-size: 120%;
+  margin-top: 0.75cm;
+}
+
+.piece.reserved {
+  box-shadow: 0 0 12px 5px gold;
+  animation: reservedPulse 1s infinite;
+}
+
+@keyframes reservedPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.black-preview {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: red;
+  opacity: .6;
+  pointer-events: none;
+}
+
+#board-wrapper{
+    position:relative;
+    display:inline-block;
+}
+
+#arrowLayer{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    overflow:visible;
+}
+
+.black-arrow{
+    fill:none;
+    stroke:red;
+    stroke-width:5;
+    stroke-linecap:round;
+    opacity:.8;
+    marker-end:url(#arrowHead);
+}
+
+#arrowCanvas{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:30;
+}
+
+.combat-roll {
+    position: absolute;
+    z-index: 10000;
+    transform: translate(-50%, -100%);
+    padding: 5px 9px;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 2px 6px #0008;
+    animation: combatPop 0.2s ease-out;
+}
+
+.combat-roll.attack {
+    border: 2px solid #ff5252;
+}
+
+.combat-roll.defense {
+    border: 2px solid #42a5f5;
+}
+
+.combat-roll.win {
+    background: #176b35;
+}
+
+.combat-roll.lose {
+    background: #8b2525;
+}
+
+@keyframes combatPop {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -80%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -100%);
+    }
+}
+
+.combat-pause-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#battle-preview {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+
+    width: 210px;
+    padding: 12px;
+
+    background: #222;
+    color: white;
+
+    border: 1px solid #777;
+    border-radius: 10px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+
+    pointer-events: none;
+    font-size: 14px;
+}
+
+.battle-preview-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.battle-preview-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.battle-preview-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.battle-preview-stats strong {
+    font-size: 17px;
+    color: #ffd166;
+}
+
+.battle-vs {
+    font-weight: bold;
+    color: #ff7777;
+}
+
+.battle-preview-rate {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #555;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.battle-preview-rate strong {
+    color: #66e39a;
+    font-size: 22px;
+}
+
+.battle-preview-detail {
+    margin-top: 6px;
+    text-align: center;
+    color: #aaa;
+    font-size: 11px;
+}
+
+.battle-preview-stats small {
+    color: #aaa;
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+.battle-preview-stats strong {
+    display: block;
+}
+
+#battle-preview {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    width: 210px;
+    padding: 12px;
+    background: #222;
+    color: white;
+    border: 1px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    pointer-events: none;
+    font-size: 14px;
+}
+
+
+/* 체스판 + 상점 배치 */
+#labapp {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+}
+
+/* 상점 전체 */
+#shopPanel {
+    flex: 1;
+    min-width: 250px;
+    max-width: 340px;
+    min-height: 500px;
+    padding: 18px;
+
+    background: #20242b;
+    color: white;
+
+    border: 1px solid #444;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* 상점 제목 */
+.shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.shop-header h3 {
+    font-size: 21px;
+    margin: 0;
+}
+
+.shop-money {
+    background: #393d46;
+    padding: 7px 12px;
+    border-radius: 8px;
+    color: #ffd45c;
+    font-weight: bold;
+}
+
+/* 탭 */
+.shop-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+.shop-tab {
+    flex: 1;
+    padding: 8px 4px;
+    border: none;
+    border-radius: 6px;
+    background: #353a43;
+    color: #bbb;
+}
+
+.shop-tab.active {
+    background: #647da5;
+    color: white;
+}
+
+/* 아이템 목록 */
+.shop-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 아이템 카드 */
+.shop-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px;
+
+    background: #30353e;
+    border: 1px solid #484e59;
+    border-radius: 9px;
+}
+
+.shop-piece {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #454b56;
+    border-radius: 8px;
+
+    font-size: 35px;
+}
+
+.shop-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.shop-info strong {
+    font-size: 15px;
+}
+
+.shop-info span {
+    color: #aaa;
+    font-size: 12px;
+}
+
+.shop-info b {
+    color: #ffd45c;
+    font-size: 13px;
+}
+
+.shop-item button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    background: #ffc144;
+    color: #000000;
+    font-size: 12px;
+}
+
+.shop-footer {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid #444;
+    color: #999;
+    font-size: 12px;
+}
+
+/* 화면이 좁을 때 */
+@media (max-width: 850px) {
+    #labapp {
+        flex-direction: column;
+    }
+
+    #shopPanel {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+
+.reserved-placement {
+    outline: 3px dashed orange;
+    outline-offset: -3px;
+    background-color: rgba(255, 165, 0, 0.25) !important;
 }
